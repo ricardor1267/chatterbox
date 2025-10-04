@@ -1,0 +1,9 @@
+{
+  "input": {
+    "text": "Hello, this is a test of the Chatterbox multilingual text to speech system. Welcome to RunPod!",
+    "model_type": "multilingual",
+    "language_id": "en",
+    "exaggeration": 0.5,
+    "cfg_weight": 0.5
+  }
+}
