@@ -1,0 +1,66 @@
+[
+  {
+    "name": "english_basic_test",
+    "input": {
+      "text": "Hello, this is a test of the Chatterbox text to speech system.",
+      "model_type": "english",
+      "exaggeration": 0.5,
+      "cfg_weight": 0.5
+    },
+    "timeout": 120000,
+    "gpuTypeId": "NVIDIA RTX A4000",
+    "gpuCount": 1
+  },
+  {
+    "name": "multilingual_english_test",
+    "input": {
+      "text": "Welcome to Chatterbox multilingual text to speech.",
+      "model_type": "multilingual",
+      "language_id": "en",
+      "exaggeration": 0.5,
+      "cfg_weight": 0.5
+    },
+    "timeout": 120000,
+    "gpuTypeId": "NVIDIA RTX A4000",
+    "gpuCount": 1
+  },
+  {
+    "name": "spanish_test",
+    "input": {
+      "text": "Hola, este es un sistema de síntesis de voz multilingüe.",
+      "model_type": "multilingual",
+      "language_id": "es",
+      "exaggeration": 0.5,
+      "cfg_weight": 0.5
+    },
+    "timeout": 120000,
+    "gpuTypeId": "NVIDIA RTX A4000",
+    "gpuCount": 1
+  },
+  {
+    "name": "french_test",
+    "input": {
+      "text": "Bonjour, ceci est un test du système de synthèse vocale.",
+      "model_type": "multilingual",
+      "language_id": "fr",
+      "exaggeration": 0.7,
+      "cfg_weight": 0.3
+    },
+    "timeout": 120000,
+    "gpuTypeId": "NVIDIA RTX A4000",
+    "gpuCount": 1
+  },
+  {
+    "name": "long_text_test",
+    "input": {
+      "text": "This is a longer test to ensure the system can handle extended text input. The Chatterbox TTS system is designed to produce high-quality, natural-sounding speech across multiple languages with advanced emotion control.",
+      "model_type": "multilingual",
+      "language_id": "en",
+      "exaggeration": 0.5,
+      "cfg_weight": 0.5
+    },
+    "timeout": 180000,
+    "gpuTypeId": "NVIDIA RTX A4000",
+    "gpuCount": 1
+  }
+]

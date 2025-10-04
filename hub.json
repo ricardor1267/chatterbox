@@ -1,0 +1,31 @@
+{
+  "title": "Chatterbox Multilingual TTS",
+  "description": "High-quality multilingual text-to-speech with zero-shot voice cloning supporting 23 languages. Features emotion control, ultra-stable alignment-informed inference, and built-in watermarking. Outperforms leading closed-source systems in side-by-side evaluations.",
+  "type": "serverless",
+  "category": "audio",
+  "iconUrl": "https://www.resemble.ai/wp-content/uploads/2025/09/Chatterbox-Multilingual-1.png",
+  "config": {
+    "runsOn": "GPU",
+    "containerDiskInGb": 40,
+    "gpuCount": 1,
+    "gpuIds": [
+      "NVIDIA RTX A4000",
+      "NVIDIA RTX A4500",
+      "NVIDIA RTX A5000",
+      "NVIDIA RTX A6000",
+      "NVIDIA L4",
+      "NVIDIA L40",
+      "NVIDIA L40S",
+      "NVIDIA RTX 4090",
+      "NVIDIA RTX 5000 Ada",
+      "NVIDIA RTX 6000 Ada"
+    ],
+    "allowedCudaVersions": [
+      "12.1"
+    ],
+    "env": [],
+    "presets": {
+      "advanced": true
+    }
+  }
+}
