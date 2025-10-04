@@ -6,6 +6,7 @@
 [![Alt Text](https://img.shields.io/badge/listen-demo_samples-blue)](https://resemble-ai.github.io/chatterbox_demopage/)
 [![Alt Text](https://huggingface.co/datasets/huggingface/badges/resolve/main/open-in-hf-spaces-sm.svg)](https://huggingface.co/spaces/ResembleAI/Chatterbox)
 [![Alt Text](https://static-public.podonos.com/badges/insight-on-pdns-sm-dark.svg)](https://podonos.com/resembleai/chatterbox)
+[![RunPod](https://img.shields.io/badge/RunPod-Serverless-blueviolet?logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDZWMTJMMTIgMTZMMjAgMTJWNkwxMiAyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=)](https://github.com/ricardor1267/chatterbox/tree/master/.runpod)
 [![Discord](https://img.shields.io/discord/1377773249798344776?label=join%20discord&logo=discord&style=flat)](https://discord.gg/rJq9cRJBJ6)
 
 _Made with ♥️ by <a href="https://resemble.ai" target="_blank"><img width="100" alt="resemble-logo-horizontal" src="https://github.com/user-attachments/assets/35cf756b-3506-4943-9c72-c05ddfa4e525" /></a>
@@ -86,6 +87,39 @@ wav = model.generate(text, audio_prompt_path=AUDIO_PROMPT_PATH)
 ta.save("test-2.wav", wav, model.sr)
 ```
 See `example_tts.py` and `example_vc.py` for more examples.
+
+# Deploy on RunPod Serverless
+
+Chatterbox TTS can be deployed on RunPod Serverless for production-grade, auto-scaling inference. The `.runpod/` directory contains everything you need:
+
+- 🚀 **One-click deployment** with pre-configured templates
+- ⚡ **Auto-scaling** based on demand
+- 🌍 **23 languages** supported out of the box
+- 🎭 **Zero-shot voice cloning** with reference audio
+- 💰 **Pay-per-use** pricing (no idle costs with 0 active workers)
+
+## Quick Start
+
+```bash
+# 1. Build Docker image
+cd .runpod
+./build.sh your-dockerhub-username
+
+# 2. Push to Docker Hub
+docker push your-dockerhub-username/chatterbox-runpod:latest
+
+# 3. Deploy on RunPod
+# Follow the guide: .runpod/DEPLOYMENT_GUIDE.md
+```
+
+## Documentation
+
+- 📘 [Complete Deployment Guide](.runpod/DEPLOYMENT_GUIDE.md) - Step-by-step instructions
+- 📋 [API Documentation](.runpod/README.md) - API reference and examples
+- 💻 [Integration Examples](.runpod/integration_examples.py) - FastAPI, Flask, Django, Streamlit, and more
+- 🧪 [Testing Guide](.runpod/INSTRUCCIONES_RICARDO.md) - Local testing before deployment
+
+For more details, see the [.runpod/ directory](.runpod/).
 
 # Acknowledgements
 - [Cosyvoice](https://github.com/FunAudioLLM/CosyVoice)
