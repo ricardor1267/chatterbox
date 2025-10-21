@@ -1,0 +1,10 @@
+{
+  "input": {
+    "text": "Hello! Welcome to Chatterbox text to speech on RunPod serverless.",
+    "model_type": "multilingual",
+    "language_id": "en",
+    "exaggeration": 0.5,
+    "cfg_weight": 0.5,
+    "temperature": 0.8
+  }
+}

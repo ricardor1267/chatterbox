@@ -2,11 +2,11 @@
 FROM nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
 
 # Set environment variables
-ENV DEBIAN_FRONTEND=noninteractive
-ENV PYTHONUNBUFFERED=1
-ENV CUDA_HOME=/usr/local/cuda
-ENV PATH=${CUDA_HOME}/bin:${PATH}
-ENV LD_LIBRARY_PATH=${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    CUDA_HOME=/usr/local/cuda \
+    PATH=${CUDA_HOME}/bin:${PATH} \
+    LD_LIBRARY_PATH=${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -20,29 +20,30 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Set Python 3.11 as default
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 \
-    && update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
 
 # Upgrade pip
 RUN python3 -m pip install --upgrade pip
 
 # Set working directory
-WORKDIR /app
+WORKDIR /
 
-# Copy requirements first for better caching
-COPY pyproject.toml /app/
-COPY src /app/src
+# Copy project files
+COPY pyproject.toml /
+COPY src /src
 
 # Install Chatterbox and dependencies
 RUN pip install --no-cache-dir -e . && \
     pip install --no-cache-dir runpod
 
-# Copy the handler (from root directory)
-COPY handler.py /app/handler.py
+# Copy the handler
+COPY rp_handler.py /rp_handler.py
 
-# Pre-download models to speed up cold starts (optional but recommended)
-# This will download models during build time
-RUN python3 -c "from chatterbox.mtl_tts import ChatterboxMultilingualTTS; ChatterboxMultilingualTTS.from_pretrained(device='cpu')" || true
+# Pre-download models to speed up cold starts
+# This downloads models during build time (optional but recommended)
+RUN echo "Downloading models..." && \
+    python3 -c "from chatterbox.mtl_tts import ChatterboxMultilingualTTS; ChatterboxMultilingualTTS.from_pretrained(device='cpu')" || true
 
 # Set the handler as the entrypoint
-CMD ["python3", "-u", "handler.py"]
+CMD ["python3", "-u", "/rp_handler.py"]

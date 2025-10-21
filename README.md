@@ -1,3 +1,5 @@
+[![Runpod](https://api.runpod.io/badge/ricardor1267/chatterbox)](https://console.runpod.io/hub/ricardor1267/chatterbox)
+
 
 <img width="1200" height="600" alt="Chatterbox-Multilingual" src="https://www.resemble.ai/wp-content/uploads/2025/09/Chatterbox-Multilingual-1.png" />
 
@@ -173,3 +175,6 @@ If you find this model useful, please consider citing.
 ```
 # Disclaimer
 Don't use this model to do bad things. Prompts are sourced from freely available data on the internet.
+
+[![Runpod](https://api.runpod.io/badge/ricardor1267/chatterbox)](https://console.runpod.io/hub/ricardor1267/chatterbox)
+
