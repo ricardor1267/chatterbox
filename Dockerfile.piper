@@ -1,0 +1,37 @@
+# ULTRA-LIGHTWEIGHT RunPod Worker for Piper TTS Spanish
+# Total Docker size: ~500 MB (vs 8.5 GB Chatterbox, 1-2 GB MeloTTS)
+# Model size: ~10-30 MB (vs 5.5 GB Chatterbox, 100-200 MB MeloTTS)
+FROM python:3.11-slim
+
+WORKDIR /workspace
+
+# Install system dependencies (minimal)
+RUN apt-get update && apt-get install -y \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install piper-tts (pre-compiled binary)
+RUN wget -q https://github.com/rhasspy/piper/releases/latest/download/piper_amd64.tar.gz && \
+    tar -xzf piper_amd64.tar.gz && \
+    mv piper/piper /usr/local/bin/ && \
+    chmod +x /usr/local/bin/piper && \
+    rm -rf piper piper_amd64.tar.gz
+
+# Install Python dependencies (minimal)
+RUN pip install --no-cache-dir runpod
+
+# Create models directory
+RUN mkdir -p /workspace/models
+
+# Copy the handler
+COPY rp_handler_piper.py /workspace/rp_handler.py
+
+# Pre-download Spanish voice model (optional, ~10 MB)
+# Model will auto-download on first use if this fails
+RUN wget -q -P /workspace/models \
+    https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_ES/mls_10246/low/es_ES-mls_10246-low.onnx \
+    https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_ES/mls_10246/low/es_ES-mls_10246-low.onnx.json \
+    || echo "Model will download on first use"
+
+# Set the handler as entrypoint
+CMD ["python3", "-u", "/workspace/rp_handler.py"]
