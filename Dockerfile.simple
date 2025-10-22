@@ -1,4 +1,6 @@
-# Use NVIDIA CUDA base image with Python
+# Alternative Dockerfile - Simpler approach using pip install chatterbox-tts
+# Use this if the main Dockerfile has dependency issues
+
 FROM nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
 
 # Set environment variables
@@ -16,49 +18,25 @@ RUN apt-get update && apt-get install -y \
     wget \
     libsndfile1 \
     ffmpeg \
-    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Set Python 3.11 as default
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
 
-# Upgrade pip and install build tools
-RUN python3 -m pip install --upgrade pip setuptools wheel
+# Upgrade pip
+RUN python3 -m pip install --upgrade pip
 
 # Set working directory
 WORKDIR /workspace
 
-# Copy project files
-COPY pyproject.toml /workspace/
-COPY src /workspace/src
-
-# Install dependencies separately to handle conflicts
-RUN pip install --no-cache-dir \
-    numpy==1.24.4 \
-    torch==2.6.0 \
-    torchaudio==2.6.0 \
-    transformers==4.46.3 \
-    diffusers==0.29.0 \
-    librosa==0.11.0 \
-    safetensors==0.5.3 \
-    spacy-pkuseg \
-    pykakasi==2.3.0 \
-    resemble-perth==1.0.1 \
-    conformer==0.3.2 \
-    s3tokenizer \
-    runpod
-
-# Install russian-text-stresser from git
-RUN pip install --no-cache-dir git+https://github.com/Vuizur/add-stress-to-epub
-
-# Install chatterbox-tts in editable mode
-RUN pip install --no-cache-dir -e .
+# Install chatterbox-tts from PyPI and runpod
+RUN pip install --no-cache-dir chatterbox-tts runpod
 
 # Copy the handler
 COPY rp_handler.py /workspace/rp_handler.py
 
-# Pre-download models to speed up cold starts (optional but recommended)
+# Pre-download models (optional but recommended)
 RUN echo "Downloading multilingual model..." && \
     python3 -c "from chatterbox.mtl_tts import ChatterboxMultilingualTTS; ChatterboxMultilingualTTS.from_pretrained(device='cpu')" || \
     echo "Warning: Model download failed, will download on first use"

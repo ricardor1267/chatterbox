@@ -1,4 +1,4 @@
-# Use NVIDIA CUDA base image with Python
+# Dockerfile with flexible dependency resolution
 FROM nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
 
 # Set environment variables
@@ -23,43 +23,49 @@ RUN apt-get update && apt-get install -y \
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
 
-# Upgrade pip and install build tools
+# Upgrade pip
 RUN python3 -m pip install --upgrade pip setuptools wheel
 
 # Set working directory
 WORKDIR /workspace
 
+# Install PyTorch first (most important dependency)
+RUN pip install --no-cache-dir \
+    torch==2.6.0 \
+    torchaudio==2.6.0
+
+# Install other core dependencies
+RUN pip install --no-cache-dir \
+    numpy>=1.24.0 \
+    transformers \
+    diffusers \
+    librosa \
+    safetensors \
+    runpod
+
 # Copy project files
 COPY pyproject.toml /workspace/
 COPY src /workspace/src
 
-# Install dependencies separately to handle conflicts
-RUN pip install --no-cache-dir \
-    numpy==1.24.4 \
-    torch==2.6.0 \
-    torchaudio==2.6.0 \
-    transformers==4.46.3 \
-    diffusers==0.29.0 \
-    librosa==0.11.0 \
-    safetensors==0.5.3 \
-    spacy-pkuseg \
-    pykakasi==2.3.0 \
-    resemble-perth==1.0.1 \
-    conformer==0.3.2 \
+# Install chatterbox without strict version requirements
+# This allows pip to resolve dependencies flexibly
+RUN pip install --no-cache-dir -e . --no-deps && \
+    pip install --no-cache-dir \
+    resemble-perth \
+    conformer \
     s3tokenizer \
-    runpod
+    spacy-pkuseg \
+    pykakasi
 
-# Install russian-text-stresser from git
-RUN pip install --no-cache-dir git+https://github.com/Vuizur/add-stress-to-epub
-
-# Install chatterbox-tts in editable mode
-RUN pip install --no-cache-dir -e .
+# Install russian-text-stresser
+RUN pip install --no-cache-dir git+https://github.com/Vuizur/add-stress-to-epub || \
+    echo "Warning: russian-text-stresser installation failed"
 
 # Copy the handler
 COPY rp_handler.py /workspace/rp_handler.py
 
-# Pre-download models to speed up cold starts (optional but recommended)
-RUN echo "Downloading multilingual model..." && \
+# Pre-download models
+RUN echo "Downloading models..." && \
     python3 -c "from chatterbox.mtl_tts import ChatterboxMultilingualTTS; ChatterboxMultilingualTTS.from_pretrained(device='cpu')" || \
     echo "Warning: Model download failed, will download on first use"
 
